@@ -2,7 +2,9 @@
 print("@startuml")
 for index,headerFile in ipairs(arg) do
 	if headerFile:match(".h$") then
-		local file = io.open(headerFile):read("*a")
+		local file_ = io.open(headerFile)
+		local file = file_:read("*a")
+		file_:close()
 
 		local classPattern = "class[%s]+([%w%s:_,]-)[%s]*{"
 		local classHead = file:match(classPattern)
