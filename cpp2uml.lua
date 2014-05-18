@@ -1,20 +1,18 @@
 #!/usr/bin/lua
-local files = arg[1]
---for k,v in ipairs(arg) do
---	print(k,v)
---end
 print("@startuml")
+for index,headerFile in ipairs(arg) do
+	if headerFile:match(".h$") then
+		local file = io.open(headerFile):read("*a")
 
-local file = io.open(files):read("*a")
+		local classPattern = "class[%s]+([%w%s:_,]-)[%s]+{"
+		local classHead = file:match(classPattern)
 
-local classPattern = "class[%s]+([%w%s:_,]-)[%s]+{"
-local classHead = file:match(classPattern)
+		local baseClass, motherClass = classHead:match("(%w+)%s+:%s+([%s,%w]+)")
+		motherClass = motherClass:gmatch("(public%s+%w+)")
 
-local baseClass, motherClass = classHead:match("(%w+)%s+:%s+([%s,%w]+)")
-motherClass = motherClass:gmatch("(public%s+%w+)")
-
-for mother in motherClass do
-	print("\t"..mother:gsub("public%s+","").." <|-- "..baseClass)
+		for mother in motherClass do
+			print("\t"..mother:gsub("public%s+","").." <|-- "..baseClass)
+		end
+	end
 end
-
 print("@enduml")
