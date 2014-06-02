@@ -29,7 +29,8 @@ function toUML(classTable)
 	return plantUMLString
 end
 
-for index,headerFile in ipairs(arg) do
+print("@startuml")
+for headerFile in io.input():lines() do
 	if headerFile:match(".h$") then
 		local file_ = io.open(headerFile)
 		local file = file_:read("*a")
@@ -69,10 +70,9 @@ for index,headerFile in ipairs(arg) do
 				end
 			end
 		end
---		print(dump(class))
-		print("@startuml")
+--		print(class)
 		print(toUML(class))
-		print("@enduml")
 	end
 end
+print("@enduml")
 
