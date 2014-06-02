@@ -15,12 +15,15 @@ end
 function toUML(classTable)
 	local plantUMLString = ""
 	for k,v in ipairs(classTable.motherClass) do
-		plantUMLString = plantUMLString..(v.." <|-- "..classTable.baseClass)
+		plantUMLString = plantUMLString..(v.." <|-- "..classTable.baseClass).."\n"
 	end
+
+	for k,v in ipairs(classTable.attribute) do
+		plantUMLString = plantUMLString..(classTable.baseClass.." : "..v).."\n"
+	end
+
 	return plantUMLString
 end
-
-print("@startuml")
 
 for index,headerFile in ipairs(arg) do
 	if headerFile:match(".h$") then
@@ -63,8 +66,9 @@ for index,headerFile in ipairs(arg) do
 			end
 		end
 --		print(dump(class))
+		print("@startuml")
 		print(toUML(class))
+		print("@enduml")
 	end
 end
-print("@enduml")
 
