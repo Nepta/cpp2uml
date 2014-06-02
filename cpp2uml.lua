@@ -35,8 +35,9 @@ for headerFile in io.input():lines() do
 		local file_ = io.open(headerFile)
 		local file = file_:read("*a")
 		file_:close()
-		file = file:gsub("::","_"):gsub("#endif",":")
+		file = file:gsub("::","_"):gsub("#endif",":"):gsub("enum.-};","")
 		local class = {}
+		class.motherClass = {}
 		class.method = {}
 		class.attribute = {}
 
