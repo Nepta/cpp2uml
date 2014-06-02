@@ -4,12 +4,20 @@ function dump(o)
 		local s = '{ '
 		for k,v in pairs(o) do
 			if type(k) ~= 'number' then k = '"'..k..'"' end
-			s = s .. '['..k..'] = ' .. dump(v) .. ','
+			s = s .. '\n['..k..'] = ' .. dump(v) .. ','
 		end
-		return s .. '} '
+		return s .. '}\n '
 	else
 		return tostring(o)
 	end
+end
+
+function toUML(classTable)
+	local plantUMLString = ""
+	for k,v in ipairs(classTable.motherClass) do
+		plantUMLString = plantUMLString..(v.." <|-- "..classTable.baseClass)
+	end
+	return plantUMLString
 end
 
 print("@startuml")
@@ -54,7 +62,8 @@ for index,headerFile in ipairs(arg) do
 				end
 			end
 		end
-		print(dump(class))
+--		print(dump(class))
+		print(toUML(class))
 	end
 end
 print("@enduml")
