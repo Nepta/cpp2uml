@@ -22,6 +22,10 @@ function toUML(classTable)
 		plantUMLString = plantUMLString..(classTable.baseClass.." : "..v).."\n"
 	end
 
+	for k,v in ipairs(classTable.method) do
+		plantUMLString = plantUMLString..(classTable.baseClass.." : "..v).."\n"
+	end
+	
 	return plantUMLString
 end
 
