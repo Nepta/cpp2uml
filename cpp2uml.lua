@@ -30,6 +30,7 @@ for index,headerFile in ipairs(arg) do
 
 		local baseClass, motherClass = classHead:match("(%w+)%s+:%s+([%s,%w]+)")
 		if motherClass then
+			class.baseClass = baseClass
 			motherClass = motherClass:gmatch("(public%s+%w+)")
 			class.motherClass = {}
 			for mother in motherClass do
