@@ -34,13 +34,11 @@ for index,headerFile in ipairs(arg) do
 			motherClass = motherClass:gmatch("(public%s+%w+)")
 			class.motherClass = {}
 			for mother in motherClass do
---				print("\t"..mother:gsub("public%s+","").." <|-- "..baseClass)
 				local motherClassName = mother:gsub("public%s+","")
 				table.insert(class.motherClass,motherClassName)
 			end
 		else
 			if baseClass then
---				print("\t"..(baseClass or ""))
 				table.baseClass = baseClass
 			end
 		end
@@ -49,10 +47,8 @@ for index,headerFile in ipairs(arg) do
 			chunk = chunk:gsub("//.-\n%s",""):gsub("/\*.*\*/","")
 			for member in chunk:gmatch("%s(.-);%s") do
 				if member:match("%(") then
---					print("method: ", member)
 					table.insert(class.method,member)
 				else
---					print("attribute: ",member)
 					table.insert(class.attribute,member)
 				end
 			end
