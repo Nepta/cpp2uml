@@ -60,7 +60,7 @@ for headerFile in io.input():lines() do
 		end
 
 		for chunk in classIt do
-			chunk = chunk:gsub("//.-\n%s",""):gsub("/\*.*\*/","")
+			chunk = chunk:gsub("//.-\n%s",""):gsub("/\*.*\*/",""):gsub("^#.*$","")
 			for member in chunk:gmatch("%s(.-);%s") do
 				local trimedMember = member:gsub("^%s*","")
 				if member:match("%(") then
@@ -70,8 +70,8 @@ for headerFile in io.input():lines() do
 				end
 			end
 		end
---		print(class)
-		print(toUML(class))
+		print(dump(class))
+--		print(toUML(class))
 	end
 end
 print("@enduml")
