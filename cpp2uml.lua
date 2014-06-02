@@ -40,6 +40,7 @@ for headerFile in io.input():lines() do
 		class.method = {}
 		class.attribute = {}
 
+		file = file:gsub("};",":")
 		local classIt = file:gmatch("(.-):")
 		local classPattern = "class[%s]+([%w%s:_,]-)[%s]*{"
 		local classHead = file:match(classPattern)
