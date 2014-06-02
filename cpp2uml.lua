@@ -46,10 +46,11 @@ for index,headerFile in ipairs(arg) do
 		for chunk in classIt do
 			chunk = chunk:gsub("//.-\n%s",""):gsub("/\*.*\*/","")
 			for member in chunk:gmatch("%s(.-);%s") do
+				local trimedMember = member:gsub("^%s*","")
 				if member:match("%(") then
-					table.insert(class.method,member)
+					table.insert(class.method,trimedMember)
 				else
-					table.insert(class.attribute,member)
+					table.insert(class.attribute,trimedMember)
 				end
 			end
 		end
