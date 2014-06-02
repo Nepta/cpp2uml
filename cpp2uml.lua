@@ -1,4 +1,17 @@
 #!/usr/bin/lua
+function dump(o)
+	if type(o) == 'table' then
+		local s = '{ '
+		for k,v in pairs(o) do
+			if type(k) ~= 'number' then k = '"'..k..'"' end
+			s = s .. '['..k..'] = ' .. dump(v) .. ','
+		end
+		return s .. '} '
+	else
+		return tostring(o)
+	end
+end
+
 print("@startuml")
 
 for index,headerFile in ipairs(arg) do
@@ -7,8 +20,9 @@ for index,headerFile in ipairs(arg) do
 		local file = file_:read("*a")
 		file_:close()
 		file = file:gsub("::","_"):gsub("#endif",":")
-		local method = {}
-		local attribute = {}
+		local class = {}
+		class.method = {}
+		class.attribute = {}
 
 		local classIt = file:gmatch("(.-):")
 		local classPattern = "class[%s]+([%w%s:_,]-)[%s]*{"
@@ -17,12 +31,17 @@ for index,headerFile in ipairs(arg) do
 		local baseClass, motherClass = classHead:match("(%w+)%s+:%s+([%s,%w]+)")
 		if motherClass then
 			motherClass = motherClass:gmatch("(public%s+%w+)")
-
+			class.motherClass = {}
 			for mother in motherClass do
-				print("\t"..mother:gsub("public%s+","").." <|-- "..baseClass)
+--				print("\t"..mother:gsub("public%s+","").." <|-- "..baseClass)
+				local motherClassName = mother:gsub("public%s+","")
+				table.insert(class.motherClass,motherClassName)
 			end
 		else
-			print("\t"..(baseClass or ""))
+			if baseClass then
+--				print("\t"..(baseClass or ""))
+				table.baseClass = baseClass
+			end
 		end
 
 		for chunk in classIt do
@@ -30,21 +49,15 @@ for index,headerFile in ipairs(arg) do
 			for member in chunk:gmatch("%s(.-);%s") do
 				if member:match("%(") then
 --					print("method: ", member)
-					table.insert(method,member)
+					table.insert(class.method,member)
 				else
 --					print("attribute: ",member)
-					table.insert(attribute,member)
+					table.insert(class.attribute,member)
 				end
 			end
 		end
-		print("method:")
-		for k,v in pairs(method) do
-			print(v)
-		end
-		print("\nattribute: ")
-		for k,v in pairs(attribute) do
-			print(v)
-		end
+		print(dump(class))
 	end
 end
 print("@enduml")
+
