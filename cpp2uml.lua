@@ -30,12 +30,13 @@ function toUML(classTable)
 end
 
 print("@startuml")
+print("skinparam classAttributeIconSize 0")
 for headerFile in io.input():lines() do
 	if headerFile:match(".h$") then
 		local file_ = io.open(headerFile)
 		local file = file_:read("*a")
 		file_:close()
-		file = file:gsub("::","_"):gsub("#endif",":"):gsub("enum.-};","")
+		file = file:gsub("::","_"):gsub("#endif",":"):gsub("enum.-;","")
 		local class = {}
 		class.motherClass = {}
 		class.method = {}
@@ -56,14 +57,12 @@ for headerFile in io.input():lines() do
 				table.insert(class.motherClass,motherClassName)
 			end
 		else
-			if baseClass then
-				table.baseClass = baseClass
-			end
+			class.baseClass = classHead
 		end
 
 		for chunk in classIt do
 			chunk = chunk:gsub("//.-\n%s",""):gsub("/\*.*\*/",""):gsub("^#.*$","")
-			for member in chunk:gmatch("%s(.-);%s") do
+			for member in chunk:gmatch("%s(.-)[;|{]}?%s") do
 				local trimedMember = member:gsub("^%s*","")
 				if member:match("%(") then
 					table.insert(class.method,trimedMember)
@@ -72,8 +71,8 @@ for headerFile in io.input():lines() do
 				end
 			end
 		end
-		print(dump(class))
---		print(toUML(class))
+--		print(dump(class))
+		print(toUML(class))
 	end
 end
 print("@enduml")
