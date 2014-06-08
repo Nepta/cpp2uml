@@ -67,7 +67,7 @@ for headerFile in io.input():lines() do
 				local trimedMember = member:gsub("^%s*",""):gsub("\n%s*"," ")
 				if member:match("%(") then
 					table.insert(class.method,trimedMember)
-				else
+				elseif trimedMember ~= "" then
 					table.insert(class.attribute,trimedMember)
 				end
 			end
