@@ -44,7 +44,7 @@ for headerFile in io.input():lines() do
 
 		file = file:gsub("};",":")
 		local classIt = file:gmatch("(.-):")
-		local classPattern = "class[%s]+([%w%s:_,]-)[%s]*{"
+		local classPattern = "class%s+([%w%s:_,]-)%s*{"
 		local classHead = file:match(classPattern)
 
 		local baseClass, motherClass = classHead:match("(%w+)%s+:%s+([%s,%w]+)")
@@ -63,7 +63,7 @@ for headerFile in io.input():lines() do
 		for chunk in classIt do
 			chunk = chunk:gsub("//.-\n%s",""):gsub("/\*.*\*/",""):gsub("^#.*$","")
 			for member in chunk:gmatch("%s(.-)[;|{]}?%s") do
-				local trimedMember = member:gsub("^%s*","")
+				local trimedMember = member:gsub("^%s*",""):gsub("\n%s*"," ")
 				if member:match("%(") then
 					table.insert(class.method,trimedMember)
 				else
