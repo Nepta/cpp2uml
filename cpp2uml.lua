@@ -43,9 +43,9 @@ for headerFile in io.input():lines() do
 		class.attribute = {}
 
 		file = file:gsub("};",":")
-		local classIt = file:gmatch("(.-):")
 		local classPattern = "class%s+([%w%s:_,]-)%s*{"
 		local classHead = file:match(classPattern)
+		file = file:gsub(classHead.."..","")
 
 		local baseClass, motherClass = classHead:match("(%w+)%s+:%s+([%s,%w]+)")
 		if motherClass then
@@ -60,6 +60,7 @@ for headerFile in io.input():lines() do
 			class.baseClass = classHead
 		end
 
+		local classIt = file:gmatch("(.-):")
 		for chunk in classIt do
 			chunk = chunk:gsub("//.-\n%s",""):gsub("/\*.*\*/",""):gsub("^#.*$","")
 			for member in chunk:gmatch("%s(.-)[;|{]}?%s") do
