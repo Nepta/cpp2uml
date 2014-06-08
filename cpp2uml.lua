@@ -13,7 +13,7 @@ function dump(o)
 end
 
 function toUML(classTable)
-	local plantUMLString = ""
+	local plantUMLString = "class "..classTable.baseClass.."\n"
 	for k,v in ipairs(classTable.motherClass) do
 		plantUMLString = plantUMLString..(v.." <|-- "..classTable.baseClass).."\n"
 	end
@@ -36,6 +36,7 @@ for headerFile in io.input():lines() do
 		local file_ = io.open(headerFile)
 		local file = file_:read("*a")
 		file_:close()
+		local classIt = file:gmatch("(.-):")
 		file = file:gsub("::","_"):gsub("#endif",":"):gsub("enum.-;","")
 		local class = {}
 		class.motherClass = {}
@@ -46,7 +47,6 @@ for headerFile in io.input():lines() do
 		local classPattern = "class%s+([%w%s:_,]-)%s*{"
 		local classHead = file:match(classPattern)
 		file = file:gsub(classHead.."..","")
-
 		local baseClass, motherClass = classHead:match("(%w+)%s+:%s+([%s,%w]+)")
 		if motherClass then
 			class.baseClass = baseClass
@@ -59,7 +59,7 @@ for headerFile in io.input():lines() do
 		else
 			class.baseClass = classHead
 		end
-
+		
 		local classIt = file:gmatch("(.-):")
 		for chunk in classIt do
 			chunk = chunk:gsub("//.-\n%s",""):gsub("/\*.*\*/",""):gsub("^#.*$","")
