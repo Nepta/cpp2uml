@@ -13,17 +13,17 @@ function dump(o)
 end
 
 function toUML(classTable)
-	local plantUMLString = "class "..classTable.baseClass.."\n"
+	local plantUMLString = "class \""..classTable.baseClass.."\"\n"
 	for k,v in ipairs(classTable.motherClass) do
-		plantUMLString = plantUMLString..(v.." <|-- "..classTable.baseClass).."\n"
+		plantUMLString = plantUMLString..(v.." <|-- \""..classTable.baseClass).."\"\n"
 	end
 
 	for k,v in ipairs(classTable.attribute) do
-		plantUMLString = plantUMLString..(classTable.baseClass.." : "..v).."\n"
+		plantUMLString = plantUMLString..('"'..classTable.baseClass.."\" : "..v).."\n"
 	end
 
 	for k,v in ipairs(classTable.method) do
-		plantUMLString = plantUMLString..(classTable.baseClass.." : "..v).."\n"
+		plantUMLString = plantUMLString..('"'..classTable.baseClass.."\" : "..v).."\n"
 	end
 	
 	return plantUMLString
