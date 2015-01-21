@@ -7,7 +7,7 @@ This lua script output a plantuml script used to generate uml diagram
 
 USAGE:
 ------
-$ find ~/Project/AwesomeCppProject/ -name *.h | ./cpptouml.lua | plantuml -pipe > uml.png
+$ find ~/Project/AwesomeCppProject/ -name *.h | ./cpp2uml.lua | plantuml -pipe > uml.png
 
 
 PlantUML
